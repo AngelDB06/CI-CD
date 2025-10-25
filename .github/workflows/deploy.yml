@@ -1,0 +1,54 @@
+name: CI/CD - Documentacion y Despliegue en Vercel
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build_test_document_deploy:
+    runs-on: ubuntu-latest
+    
+    # Secrets Vercel (Configurados en GitHub Settings > Secrets)
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+    steps:
+      - name: 1. Checkout del codigo
+        uses: actions/checkout@v4
+
+      - name: 2. Configurar Node.js e instalar Jest y JSDoc
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 3. Instalar dependencias (incluye Jest y JSDoc)
+        run: npm install
+
+      - name: 4. Verificar que la pagina contiene JavaScript (Fallo si no hay .js)
+        # Verifica la existencia de código fuente en la carpeta 'src'
+        run: |
+          find src -name "*.js" -print -quit | grep -q "."
+          if [ $? -eq 0 ]; then
+            echo "✅ Archivos JavaScript encontrados en src/."
+          else
+            echo "❌ ERROR: No se encontraron archivos JavaScript. Deteniendo."
+            exit 1
+          fi
+
+      - name: 5. Ejecutar Pruebas Unitarias (Fallo si las pruebas fallan)
+        # Ejecuta 'npm test' que llama a Jest.
+        run: npm test
+
+      - name: 6. Generar Documentacion (npm run docs)
+        # Genera la documentación de JSDoc en la carpeta 'docs/'
+        run: |
+          echo "Generando documentación con JSDoc..."
+          # Ejecuta el script 'docs' de package.json
+          npm run docs
+
+      - name: 7. Desplegar la Documentacion en Vercel
+        # Despliega el contenido de la carpeta 'docs' a Vercel
+        run: npx vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }} ./docs
