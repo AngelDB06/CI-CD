@@ -4,7 +4,13 @@ on:
   push:
     branches:
       - main
+      - develop
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Rama a desplegar (p.ej., develop)'
+        required: true
+        default: 'develop'
 
 jobs:
   build_test_document_deploy:
