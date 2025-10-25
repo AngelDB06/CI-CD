@@ -1,5 +1,5 @@
 {
-  "name": "mi-proyecto-documentacion",
+  "name": "CI-CD",
   "version": "1.0.0",
   "description": "Ejemplo de CI/CD para documentación con JSDoc y Vercel",
   "main": "src/utils.js",
