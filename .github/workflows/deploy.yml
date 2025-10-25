@@ -56,5 +56,5 @@ jobs:
           npm run docs
 
       - name: 7. Desplegar la Documentacion en Vercel
-        # Despliega el contenido de la carpeta 'docs' a Vercel
-        run: npx vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }} ./docs
+        # Eliminamos --prebuilt. Vercel desplegará los contenidos de ./docs
+        run: npx vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} ./docs
