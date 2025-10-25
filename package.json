@@ -1,0 +1,23 @@
+{
+  "name": "mi-proyecto-documentacion",
+  "version": "1.0.0",
+  "description": "Ejemplo de CI/CD para documentación con JSDoc y Vercel",
+  "main": "src/utils.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "docs": "jsdoc -c jsdoc.conf.json -r -d docs",
+    "ci": "npm install && npm test && npm run docs"
+  },
+  "keywords": [
+    "jsdoc",
+    "ci",
+    "vercel"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jsdoc": "^4.0.2"
+  }
+}
